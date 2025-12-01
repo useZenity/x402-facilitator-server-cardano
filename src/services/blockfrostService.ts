@@ -1,5 +1,15 @@
 import axios from "axios";
 
+interface BlockfrostUTxOResponse {
+  outputs: Array<{
+    address: string;
+    amount: Array<{
+      unit: string;
+      quantity: string;
+    }>;
+  }>;
+}
+
 const NETWORK = process.env.NETWORK || "cardano-mainnet";
 const BLOCKFROST_PROJECT_ID = process.env.BLOCKFROST_PROJECT_ID || "";
 const BF_BASE =
@@ -11,7 +21,7 @@ export async function submitTxBlockfrost(
   rawCbor: Buffer
 ): Promise<{ ok: boolean; txHash?: string; error?: string }> {
   try {
-    const res = await axios.post(`${BF_BASE}/tx/submit`, rawCbor, {
+    const res = await axios.post<string>(`${BF_BASE}/tx/submit`, rawCbor, {
       headers: {
         project_id: BLOCKFROST_PROJECT_ID,
         "Content-Type": "application/cbor",
@@ -37,10 +47,13 @@ export async function checkTxOutput(
   const deadline = Date.now() + waitSeconds * 1000;
   while (Date.now() < deadline) {
     try {
-      const res = await axios.get(`${BF_BASE}/txs/${txHash}/utxos`, {
-        headers: { project_id: BLOCKFROST_PROJECT_ID },
-        timeout: 15000,
-      });
+      const res = await axios.get<BlockfrostUTxOResponse>(
+        `${BF_BASE}/txs/${txHash}/utxos`,
+        {
+          headers: { project_id: BLOCKFROST_PROJECT_ID },
+          timeout: 15000,
+        }
+      );
       for (const out of res.data.outputs || []) {
         if (out.address !== payTo) continue;
         for (const amt of out.amount || []) {
