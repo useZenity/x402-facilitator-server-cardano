@@ -11,6 +11,7 @@ The x402 Facilitator Server provides:
 - **Flexible Configuration**: Environment-based configuration for different networks and assets
 - **Type Safety**: Full TypeScript implementation with comprehensive type definitions
 - **Testing**: Vitest-based test suite with coverage reporting
+- **API Testing Guide**: Refer to the [API Testing Guide](https://example.com/api-testing-guide) for detailed instructions on testing the API endpoints.
 
 ## 📋 Prerequisites
 
@@ -129,39 +130,6 @@ x402-facilitator-server/
 └── README.md               # This file
 ```
 
-## 🚦 Development
-
-### Available Scripts
-
-| Script             | Description                                 |
-| ------------------ | ------------------------------------------- |
-| `npm run dev`      | Start development server with hot reload    |
-| `npm run build`    | Compile TypeScript to JavaScript            |
-| `npm start`        | Start production server from compiled files |
-| `npm test`         | Run test suite                              |
-| `npm run coverage` | Run tests with coverage report              |
-
-### Development Workflow
-
-1. **Start development server**
-
-   ```bash
-   npm run dev
-   ```
-
-   The server will start on port 3000 (or your configured PORT) and automatically reload on file changes.
-
-2. **Run tests**
-
-   ```bash
-   npm test
-   ```
-
-3. **Check coverage**
-   ```bash
-   npm run coverage
-   ```
-
 ## 🔌 API Endpoints
 
 ### Protected Resource Example
@@ -262,94 +230,13 @@ app.use("/basic", paymentMiddleware(basicRequirements), basicHandler);
 
 ## 🧪 Testing
 
-### Running Tests
-
-```bash
-# Run all tests
-npm test
-
-# Run tests with coverage
-npm run coverage
-
-# Watch mode (if configured)
-npm run test:watch
-```
-
-### Test Structure
-
-Tests are located in `src/tests/` and use Vitest as the test runner. Example test:
-
-```typescript
-import { describe, it, expect } from "vitest";
-import { submitTxBlockfrost } from "../services/blockfrostService";
-
-it("returns error for invalid CBOR", async () => {
-  const result = await submitTxBlockfrost(Buffer.from("deadbeef", "hex"));
-  expect(result.ok).toBe(false);
-  expect(result.error).toMatch(/invalid/i);
-});
-```
-
-### Coverage Reports
-
-Coverage reports are generated in the `coverage/` directory when running:
-
-```bash
-npm run coverage
-```
+For detailed testing instructions, see our [API Testing Guide](./TESTING.md) and [Contributing Guide](./CONTRIBUTING.md#testing).
 
 ## 🚀 Deployment
 
-### Production Build
+For detailed deployment instructions, see our [Contributing Guide](./CONTRIBUTING.md#deployment).
 
-1. **Build the application**
-
-   ```bash
-   npm run build
-   ```
-
-2. **Start production server**
-   ```bash
-   npm start
-   ```
-
-### Environment-Specific Configuration
-
-For different deployment environments, create separate `.env` files:
-
-```bash
-# .env.production
-NETWORK=cardano-mainnet
-BLOCKFROST_PROJECT_ID=prod_key
-PAY_TO=mainnet_address
-
-# .env.staging
-NETWORK=cardano-preprod
-BLOCKFROST_PROJECT_ID=test_key
-PAY_TO=testnet_address
-```
-
-### Docker Deployment (Optional)
-
-Create a `Dockerfile`:
-
-```dockerfile
-FROM node:18-alpine
-
-WORKDIR /app
-
-COPY package*.json ./
-RUN npm ci --only=production
-
-COPY . .
-RUN npm run build
-
-EXPOSE 3000
-
-CMD ["npm", "start"]
-```
-
-## 🔒 Security Considerations
+## 🔒 Security
 
 - **Environment Variables**: Never commit `.env` files to version control
 - **API Keys**: Keep Blockfrost project IDs secure
@@ -359,47 +246,15 @@ CMD ["npm", "start"]
 
 ## 🤝 Contributing
 
-1. Fork the repository
-2. Create a feature branch: `git checkout -b feature/new-feature`
-3. Make your changes and add tests
-4. Ensure all tests pass: `npm test`
-5. Commit your changes: `git commit -am 'Add new feature'`
-6. Push to the branch: `git push origin feature/new-feature`
-7. Submit a pull request
+We welcome contributions! Please read our [Contributing Guide](./CONTRIBUTING.md) for detailed instructions on development setup, code standards, testing requirements, and submitting pull requests.
 
 ## 📝 License
 
-This project is licensed under the ISC License.
+This project is licensed under the MIT License.
 
 ## 🆘 Troubleshooting
 
-### Common Issues
-
-#### "Unknown file extension .ts" Error
-
-If you encounter this error, ensure:
-
-- `tsx` is installed as a dev dependency
-- `nodemon.json` is configured to use `tsx`
-- Your `package.json` has `"type": "module"`
-
-#### Blockfrost API Errors
-
-- Verify your `BLOCKFROST_PROJECT_ID` is correct
-- Ensure the network matches your API key (mainnet vs preprod)
-- Check your Blockfrost API quota
-
-#### Payment Verification Failures
-
-- Ensure the transaction is on the correct network
-- Verify the asset policy ID matches
-- Check that the payment amount meets requirements
-
-### Getting Help
-
-- Check the [Issues](../../issues) page for common problems
-- Create a new issue with detailed error information
-- Include your environment configuration (sans sensitive data)
+For detailed troubleshooting guides, see our [Contributing Guide](./CONTRIBUTING.md#troubleshooting).
 
 ## 📚 Related Resources
 
